@@ -1,0 +1,33 @@
+package com.example.hell_yeah_stuff.registry;
+
+import com.example.hell_yeah_stuff.HellYeahStuffMod;
+<<<<<<< HEAD
+=======
+import com.example.hell_yeah_stuff.worldgen.AmethystOutcropFeature;
+>>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+import com.example.hell_yeah_stuff.worldgen.PlatformFeature;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+/** Регистрация worldgen-фич мода. */
+public final class ModFeatures {
+
+    public static final DeferredRegister<Feature<?>> FEATURES =
+            DeferredRegister.create(Registries.FEATURE, HellYeahStuffMod.MODID);
+
+    /** Ель с платформой — спавнится вместо большой ели с шансом 5%. */
+    public static final DeferredHolder<Feature<?>, PlatformFeature> PLATFORM =
+            FEATURES.register("platform", PlatformFeature::new);
+
+<<<<<<< HEAD
+=======
+    /** Наземный аметистовый выход — горка аметиста с кристаллами. */
+    public static final DeferredHolder<Feature<?>, AmethystOutcropFeature> AMETHYST_OUTCROP =
+            FEATURES.register("amethyst_outcrop", AmethystOutcropFeature::new);
+
+>>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+    private ModFeatures() {
+    }
+}

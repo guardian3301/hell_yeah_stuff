@@ -1,0 +1,23 @@
+/locate biome minecraft:old_growth_pine_taiga
+/tp @s -726 91 43
+/enchant Dev hell_yeah_stuff:amethyst_grenades
+/tick rate 5
+/tick rate 20
+/tick freeze
+/tick unfreeze
+/tick freeze
+/tick unfreeze
+/enchant Dev minecraft:multishot 1
+/enchant Dev hell_yeah_stuff:amethyst_grenades
+/enchant Dev minecraft:quick_charge 2
+/enchant Dev hell_yeah_stuff:amethyst_grenades
+/tick freeze
+/tick unfreeze
+/tick freeze
+/tick unfreeze
+/tick freeze
+/tick unfreeze
+/tick freeze
+/tick unfreeze
+/tick freeze
+/tick unfreeze

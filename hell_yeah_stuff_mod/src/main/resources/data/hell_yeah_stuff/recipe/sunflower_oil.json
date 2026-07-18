@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "hell_yeah_stuff:crushed_seeds"
+    },
+    {
+      "item": "hell_yeah_stuff:crushed_seeds"
+    },
+    {
+      "item": "hell_yeah_stuff:crushed_seeds"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "id": "hell_yeah_stuff:sunflower_oil",
+    "count": 1
+  }
+}

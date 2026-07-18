@@ -1,0 +1,30 @@
+{
+  "contender_shot_0": {
+    "subtitle": "subtitles.hell_yeah_stuff.contender_shot",
+    "sounds": ["hell_yeah_stuff:contender_shot_0"]
+  },
+  "contender_shot_1": {
+    "subtitle": "subtitles.hell_yeah_stuff.contender_shot",
+    "sounds": ["hell_yeah_stuff:contender_shot_1"]
+  },
+  "bullet_insert_0": {
+    "subtitle": "subtitles.hell_yeah_stuff.bullet_insert",
+    "sounds": ["hell_yeah_stuff:bullet_insert_0"]
+  },
+  "bullet_insert_1": {
+    "subtitle": "subtitles.hell_yeah_stuff.bullet_insert",
+    "sounds": ["hell_yeah_stuff:bullet_insert_1"]
+  },
+  "casing_bounce_0": {
+    "subtitle": "subtitles.hell_yeah_stuff.casing_bounce",
+    "sounds": ["hell_yeah_stuff:casing_bounce_0"]
+  },
+  "casing_bounce_1": {
+    "subtitle": "subtitles.hell_yeah_stuff.casing_bounce",
+    "sounds": ["hell_yeah_stuff:casing_bounce_1"]
+  },
+  "casing_bounce_2": {
+    "subtitle": "subtitles.hell_yeah_stuff.casing_bounce",
+    "sounds": ["hell_yeah_stuff:casing_bounce_2"]
+  }
+}

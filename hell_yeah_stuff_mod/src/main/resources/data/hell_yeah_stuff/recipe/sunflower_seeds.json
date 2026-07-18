@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:sunflower"
+  ],
+  "result": {
+    "id": "hell_yeah_stuff:sunflower_seeds",
+    "count": 3
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "H",
+    "S",
+    "F"
+  ],
+  "key": {
+    "H": {
+<<<<<<< HEAD
+      "item": "hell_yeah_stuff:hardened_iron"
+=======
+      "item": "minecraft:iron_ingot"
+>>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    }
+  },
+  "result": {
+    "id": "hell_yeah_stuff:dart",
+    "count": 4
+  }
+}

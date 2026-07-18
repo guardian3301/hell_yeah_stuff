@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "level=1,phase=0": { "model": "hell_yeah_stuff:block/oil_cauldron_level1" },
+    "level=1,phase=1": { "model": "hell_yeah_stuff:block/oil_cauldron_level1" },
+    "level=1,phase=2": { "model": "hell_yeah_stuff:block/oil_cauldron_level1" },
+    "level=1,phase=3": { "model": "hell_yeah_stuff:block/oil_cauldron_level1" },
+    "level=1,phase=4": { "model": "hell_yeah_stuff:block/oil_cauldron_level1" },
+    "level=2,phase=0": { "model": "hell_yeah_stuff:block/oil_cauldron_level2" },
+    "level=2,phase=1": { "model": "hell_yeah_stuff:block/oil_cauldron_level2" },
+    "level=2,phase=2": { "model": "hell_yeah_stuff:block/oil_cauldron_level2" },
+    "level=2,phase=3": { "model": "hell_yeah_stuff:block/oil_cauldron_level2" },
+    "level=2,phase=4": { "model": "hell_yeah_stuff:block/oil_cauldron_level2" },
+    "level=3,phase=0": { "model": "hell_yeah_stuff:block/oil_cauldron_full_phase0" },
+    "level=3,phase=1": { "model": "hell_yeah_stuff:block/oil_cauldron_full_phase1" },
+    "level=3,phase=2": { "model": "hell_yeah_stuff:block/oil_cauldron_full_phase2" },
+    "level=3,phase=3": { "model": "hell_yeah_stuff:block/oil_cauldron_full_phase3" },
+    "level=3,phase=4": { "model": "hell_yeah_stuff:block/oil_cauldron_full_phase4" }
+  }
+}

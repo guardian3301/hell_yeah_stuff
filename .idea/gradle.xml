@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+<<<<<<< HEAD
+        <option name="externalProjectPath" value="$PROJECT_DIR$/mini-crossbow-mod" />
+        <option name="gradleJvm" value="21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/mini-crossbow-mod" />
+=======
+        <option name="externalProjectPath" value="$PROJECT_DIR$/hell_yeah_stuff_mod" />
+        <option name="gradleJvm" value="21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/hell_yeah_stuff_mod" />
+>>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

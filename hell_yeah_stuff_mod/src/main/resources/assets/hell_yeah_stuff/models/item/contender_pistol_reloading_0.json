@@ -1,0 +1,19 @@
+{
+	"parent": "minecraft:item/handheld",
+	"gui_light": "front",
+	"textures": {
+		"layer0": "hell_yeah_stuff:item/contender_pistol_reloading_0"
+	},
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, -90, 25],
+			"translation": [1.13, 0.2, 1.13],
+			"scale": [0.68, 0.68, 0.68]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 90, -25],
+			"translation": [1.13, 0.2, 1.13],
+			"scale": [0.68, 0.68, 0.68]
+		}
+	}
+}
