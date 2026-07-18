@@ -94,14 +94,11 @@ public class GrappleDartRenderer extends ArrowRenderer<GrappleDartEntity> {
                 py + player.getBbHeight() * 0.62D,
                 pz + sin * 0.36D * armSign + cos * 0.25D);
 
-<<<<<<< HEAD
-=======
         // Дротик в плоте Sable-структуры рисуется в системе координат плота —
         // проецируем точку руки (мир) в плот, чтобы трос шёл к руке корректно.
         hand = com.example.hell_yeah_stuff.compat.SableCompat.projectFromWorld(
                 dart.level(), dart.blockPosition(), hand);
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         Vec3 dartPos = new Vec3(
                 Mth.lerp(partialTicks, dart.xo, dart.getX()),
                 Mth.lerp(partialTicks, dart.yo, dart.getY()) + 0.05D,

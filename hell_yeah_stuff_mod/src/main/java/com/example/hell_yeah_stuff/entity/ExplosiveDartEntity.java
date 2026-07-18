@@ -13,10 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-<<<<<<< HEAD
-=======
 import net.minecraft.world.phys.Vec3;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import org.jetbrains.annotations.Nullable;
 
 public class ExplosiveDartEntity extends AbstractArrow {
@@ -31,15 +28,12 @@ public class ExplosiveDartEntity extends AbstractArrow {
     /** -1 = не активирован; иначе — оставшиеся тики до взрыва */
     private int fuseTicks = -1;
 
-<<<<<<< HEAD
-=======
     /** Цель, в которую впился дротик: до взрыва он следует за ней,
      *  как обычная стрела, торчащая из моба. Не сохраняется в NBT —
      *  после перезагрузки мира дротик просто доработает таймер на месте. */
     @Nullable
     private LivingEntity stuckTarget;
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     public ExplosiveDartEntity(EntityType<? extends ExplosiveDartEntity> type, Level level) {
         super(type, level);
     }
@@ -58,9 +52,6 @@ public class ExplosiveDartEntity extends AbstractArrow {
     public void tick() {
         super.tick();
 
-<<<<<<< HEAD
-        if (this.fuseTicks >= 0 && !this.level().isClientSide) {
-=======
         if (this.level().isClientSide) {
             return;
         }
@@ -80,7 +71,6 @@ public class ExplosiveDartEntity extends AbstractArrow {
         }
 
         if (this.fuseTicks >= 0) {
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
             if (this.fuseTicks == 0) {
                 this.explode();
                 return;
@@ -110,24 +100,13 @@ public class ExplosiveDartEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-<<<<<<< HEAD
-        // Не вызываем super, чтобы дротик не исчез после попадания —
-        // он должен остаться и взорваться по таймеру
-=======
         // Не вызываем super: ванильный путь уничтожил бы дротик после
         // попадания, а он должен ВПИТЬСЯ в цель, как обычная стрела,
         // и взорваться по таймеру, следуя за жертвой.
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         if (!this.level().isClientSide) {
             Entity target = result.getEntity();
             Entity owner = this.getOwner();
             DamageSource source = this.damageSources().arrow(this, owner != null ? owner : this);
-<<<<<<< HEAD
-            target.hurt(source, (float) this.getBaseDamage());
-
-            // Дротик застревает: гасим скорость и останавливаемся на месте попадания
-            this.setDeltaMovement(this.getDeltaMovement().scale(-0.05D));
-=======
             boolean hurt = target.hurt(source, (float) this.getBaseDamage());
 
             if (hurt && target instanceof LivingEntity living && living.isAlive()) {
@@ -138,7 +117,6 @@ public class ExplosiveDartEntity extends AbstractArrow {
                 this.noPhysics = true; // не цепляем повторные хиты/блоки по пути
             }
             this.setDeltaMovement(Vec3.ZERO);
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
             this.arm();
         }
     }

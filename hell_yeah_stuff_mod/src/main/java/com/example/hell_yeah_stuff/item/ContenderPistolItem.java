@@ -164,11 +164,7 @@ public class ContenderPistolItem extends ProjectileWeaponItem {
 
     /**
      * Мы наследуемся от CrossbowItem, а для «арбалетных» предметов
-<<<<<<< HEAD
-     * ванилла НЕ вызывает finishUsingItem по ис��ечении времени —
-=======
      * ванилла НЕ вызывает finishUsingItem по истечении времени —
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
      * только releaseUsing при отпускании. Возвращаем false, чтобы
      * finishUsingItem снова работал как у обычных предметов.
      */

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "hell_yeah_stuff:item/sunflower_seeds"
-  }
-}

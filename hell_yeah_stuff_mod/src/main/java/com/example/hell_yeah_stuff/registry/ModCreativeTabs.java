@@ -1,43 +1,14 @@
 package com.example.hell_yeah_stuff.registry;
 
 import com.example.hell_yeah_stuff.HellYeahStuffMod;
-<<<<<<< HEAD
-import net.minecraft.world.item.CreativeModeTabs;
-=======
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
-<<<<<<< HEAD
-@EventBusSubscriber(modid = HellYeahStuffMod.MODID, bus = EventBusSubscriber.Bus.MOD)
-public final class ModCreativeTabs {
-
-    @SubscribeEvent
-    static void addToCreativeTabs(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-            event.accept(ModItems.MINI_CROSSBOW.get());
-            event.accept(ModItems.DART.get());
-            event.accept(ModItems.EXPLOSIVE_DART.get());
-            event.accept(ModItems.GRAPPLE_DART.get());
-            // >>> NEW
-            event.accept(ModItems.CONTENDER_PISTOL.get());
-            event.accept(ModItems.CARTRIDGE.get());
-            // <<< NEW
-            event.accept(ModItems.BLOCK_MAGAZINE.get());
-        }
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.SUNFLOWER_SEEDS.get());
-            event.accept(ModItems.ROASTED_SEEDS.get());
-            event.accept(ModItems.CRUSHED_SEEDS.get());
-            event.accept(ModItems.SUNFLOWER_OIL.get());
-            event.accept(ModItems.HARDENED_IRON.get());
-        }
-=======
 /**
  * Предметы мода встают в креативе РЯДОМ СО СВОИМИ АНАЛОГАМИ (вкладка Combat):
  *  - мини-арбалет и Contender — сразу после ванильного арбалета;
@@ -84,7 +55,6 @@ public final class ModCreativeTabs {
         // Блочный магазин — рядом с лошадиной бронёй.
         event.insertAfter(new ItemStack(Items.DIAMOND_HORSE_ARMOR),
                 new ItemStack(ModItems.BLOCK_MAGAZINE.get()), VISIBLE);
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     }
 
     private ModCreativeTabs() {}

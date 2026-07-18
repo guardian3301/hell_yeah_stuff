@@ -1,9 +1,6 @@
 package com.example.hell_yeah_stuff.entity;
 
-<<<<<<< HEAD
-=======
 import com.example.hell_yeah_stuff.compat.SableCompat;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import com.example.hell_yeah_stuff.registry.ModEntities;
 import com.example.hell_yeah_stuff.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
@@ -24,13 +21,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-<<<<<<< HEAD
-import java.util.List;
-=======
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 
 /**
  * Одноразовый цепкий дротик с физикой а-ля Dying Light 2:
@@ -114,8 +107,6 @@ public class GrappleDartEntity extends AbstractArrow {
      *  -1 = ещё не заякорился. */
     private int clientAnchorTick = -1;
 
-<<<<<<< HEAD
-=======
     /** Активные (воткнутые) дротики по владельцам — вместо дорогого поиска
      *  по огромному AABB. Отдельные карты на клиент/сервер (integrated server
      *  держит оба мира в одном процессе). Нужен и для Sable: дротик, воткнутый
@@ -128,7 +119,6 @@ public class GrappleDartEntity extends AbstractArrow {
         return level.isClientSide ? ACTIVE_CLIENT : ACTIVE_SERVER;
     }
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     public GrappleDartEntity(EntityType<? extends GrappleDartEntity> type, Level level) {
         super(type, level);
     }
@@ -176,12 +166,6 @@ public class GrappleDartEntity extends AbstractArrow {
      *  НЕ трогаем — иначе сервер затрeт реальный импульс качания. */
     public void detach() {
         if (!this.level().isClientSide && this.getOwner() instanceof LivingEntity living) {
-<<<<<<< HEAD
-            living.fallDistance = 0.0F; // небольшая страховка в ��омент отцепа
-        }
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                SoundEvents.LEASH_KNOT_BREAK, SoundSource.PLAYERS, 1.0F, 1.1F);
-=======
             living.fallDistance = 0.0F; // небольшая страховка в момент отцепа
         }
         Vec3 at = this.anchorPos(); // звук — в мировой точке якоря, не в плоте
@@ -190,7 +174,6 @@ public class GrappleDartEntity extends AbstractArrow {
         if (this.getOwner() instanceof Player player) {
             activeMap(this.level()).remove(player.getUUID(), this);
         }
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         this.discard();
     }
 
@@ -211,15 +194,6 @@ public class GrappleDartEntity extends AbstractArrow {
         living.fallDistance = 0.0F;
     }
 
-<<<<<<< HEAD
-    /** Активный (воткнутый) дротик игрока поблизости; работает на обеих сторонах. */
-    @Nullable
-    public static GrappleDartEntity findActive(Level level, Player player) {
-        List<GrappleDartEntity> darts = level.getEntitiesOfClass(GrappleDartEntity.class,
-                player.getBoundingBox().inflate(MAX_ROPE_LENGTH * BREAK_FACTOR + 16.0D),
-                dart -> dart.getOwner() == player && dart.isAnchored());
-        return darts.isEmpty() ? null : darts.get(0);
-=======
     /**
      * МИРОВАЯ позиция якоря. Обычно это позиция дротика; но если дротик
      * воткнут в движущуюся структуру Sable (саб-левел), его координаты —
@@ -243,7 +217,6 @@ public class GrappleDartEntity extends AbstractArrow {
             return null;
         }
         return dart;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     }
 
     // ------------------------------------------------------------------
@@ -257,18 +230,11 @@ public class GrappleDartEntity extends AbstractArrow {
             this.entityData.set(ANCHORED, true);
             // Длина троса = дистанция до стрелка в момент зацепа:
             // выстрелил с 20 блоков — висишь в 20 блоках от якоря.
-<<<<<<< HEAD
-            Entity owner = this.getOwner();
-            if (owner != null) {
-                this.entityData.set(ROPE_LENGTH, (float) Mth.clamp(
-                        owner.position().add(0.0D, owner.getBbHeight() * 0.5D, 0.0D).distanceTo(this.position()),
-=======
             // Считаем по МИРОВОЙ позиции якоря (учёт Sable саб-левелов).
             Entity owner = this.getOwner();
             if (owner != null) {
                 this.entityData.set(ROPE_LENGTH, (float) Mth.clamp(
                         owner.position().add(0.0D, owner.getBbHeight() * 0.5D, 0.0D).distanceTo(this.anchorPos()),
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
                         MIN_ROPE_LENGTH, MAX_ROPE_LENGTH));
             }
         }
@@ -295,15 +261,12 @@ public class GrappleDartEntity extends AbstractArrow {
             return;
         }
 
-<<<<<<< HEAD
-=======
         // Регистрация активного крюка владельца (обе стороны) — для
         // findActive без поиска по AABB (и для якорей в Sable-плотах).
         if (owner instanceof Player player) {
             activeMap(this.level()).put(player.getUUID(), this);
         }
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         // Физика качания — на клиенте того игрока, который висит:
         // движение игрока клиент-авторитативно, так получается плавно.
         if (this.level().isClientSide) {
@@ -322,11 +285,7 @@ public class GrappleDartEntity extends AbstractArrow {
         }
 
         double dist = living.position().add(0.0D, living.getBbHeight() * 0.5D, 0.0D)
-<<<<<<< HEAD
-                .distanceTo(this.position());
-=======
                 .distanceTo(this.anchorPos());
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 
         // Слишком далеко — трос рвётся.
         if (dist > MAX_ROPE_LENGTH * BREAK_FACTOR) {
@@ -350,13 +309,9 @@ public class GrappleDartEntity extends AbstractArrow {
         if (this.clientRopeLength < 0.0D) {
             this.clientRopeLength = this.getRopeLength();
         }
-<<<<<<< HEAD
-        Vec3 anchor = this.position();
-=======
         // Якорь — в МИРОВЫХ координатах (для Sable-структур позиция дротика
         // проецируется из плота позой саб-левела: маятник следует за судном).
         Vec3 anchor = this.anchorPos();
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         Vec3 body = living.position().add(0.0D, living.getBbHeight() * 0.5D, 0.0D);
         Vec3 toAnchor = anchor.subtract(body);
         double dist = toAnchor.length();
@@ -388,11 +343,7 @@ public class GrappleDartEntity extends AbstractArrow {
         Vec3 vel = living.getDeltaMovement();
         boolean changed = false;
 
-<<<<<<< HEAD
-        // Раскачиван��е: WASD в воздухе подталкивает игрока
-=======
         // Раскачивание: WASD в воздухе подталкивает игрока
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         // (xxa/zza — ввод движения локального игрока, как в Entity#getInputVector).
         // Толчок проецируется на СФЕРУ вокруг якоря: радиальная составляющая
         // (вдоль троса) убирается, остаётся касательная — игрок раскачивается
