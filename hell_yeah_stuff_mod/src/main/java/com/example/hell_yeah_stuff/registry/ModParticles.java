@@ -14,11 +14,19 @@ public final class ModParticles {
             DeferredRegister.create(Registries.PARTICLE_TYPE, HellYeahStuffMod.MODID);
 
     /**
-     * «Взмах» аметистовой сабли — аналог ванильного sweep_attack,
-     * но со своей текстурой (фиолетовая дуга, кадры slash_0..slash_3).
+     * «Взмах» алебарды по ЛКМ — своя текстура (particle/slash, 16x16).
      */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLASH =
             PARTICLE_TYPES.register("slash", () -> new SimpleParticleType(false));
+
+    /** Дальний рубящий удар по ПКМ — своя текстура (particle/slash_cut). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLASH_CUT =
+            PARTICLE_TYPES.register("slash_cut", () -> new SimpleParticleType(false));
+
+    /** Второй (перпендикулярный) удар «Judgment Cut» — своя текстура
+     *  (particle/slash_judgment). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLASH_JUDGMENT =
+            PARTICLE_TYPES.register("slash_judgment", () -> new SimpleParticleType(false));
 
     private ModParticles() {}
 }

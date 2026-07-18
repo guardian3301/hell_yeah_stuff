@@ -11,10 +11,10 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 /**
- * Частица взмаха алебарды: собственные кадры анимации в отдельных файлах
- * (hell_yeah_stuff:slash_0..3, текстуры 32x32, см. particles/slash.json и
- * textures/particle/slash_*.png), с фиолетовым (аметистовым) тинтом.
- * Поведение повторяет ванильный AttackSweepParticle.
+ * Частица взмаха алебарды. Одна и та же реализация обслуживает три типа
+ * частиц с РАЗНЫМИ текстурами: ЛКМ (particle/slash, 16x16), первый разрез
+ * ПКМ (particle/slash_cut) и второй разрез «Judgment Cut» (particle/slash_judgment).
+ * Текстура берётся из sprite set соответствующего типа; тинт не применяется.
  */
 @OnlyIn(Dist.CLIENT)
 public class SlashParticle extends TextureSheetParticle {
@@ -24,15 +24,14 @@ public class SlashParticle extends TextureSheetParticle {
     protected SlashParticle(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
         super(level, x, y, z, 0.0D, 0.0D, 0.0D);
         this.sprites = sprites;
-        this.lifetime = 4; // как у ванильного sweep_attack
+        this.lifetime = 6;
         this.gravity = 0.0F;
         this.quadSize = 1.0F;
-        // Фиолетовый тинт поверх белых ванильных кадров:
-        // лёгкая случайная вариация яркости, как у ванили (там серый f=0.4..1.0).
-        float f = this.random.nextFloat() * 0.2F + 0.8F;
-        this.rCol = 0.72F * f;
-        this.gCol = 0.42F * f;
-        this.bCol = 0.96F * f;
+        // Тинта нет — частица показывает цвета своей текстуры как есть
+        // (у ЛКМ / первого и второго разрезов ПКМ разные текстуры).
+        this.rCol = 1.0F;
+        this.gCol = 1.0F;
+        this.bCol = 1.0F;
         this.setSpriteFromAge(sprites);
     }
 

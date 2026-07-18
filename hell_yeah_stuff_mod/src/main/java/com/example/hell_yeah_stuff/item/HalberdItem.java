@@ -1,9 +1,12 @@
 package com.example.hell_yeah_stuff.item;
 
+import com.example.hell_yeah_stuff.event.JudgmentCutHandler;
 import com.example.hell_yeah_stuff.registry.ModEnchantments;
 import com.example.hell_yeah_stuff.registry.ModParticles;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,24 +18,26 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Алебарда — древковое оружие ближнего боя с режущим (slash) уроном.
  *
- * ЛКМ: каждый удар по цели дополнительно рассекает всех врагов рядом с ней
- * (всегда-активный «размах»). Взмах рисуется фиолетовой частицей
- * {@code hell_yeah_stuff:slash}.
+ * ЛКМ: удар по цели рассекает и всех врагов рядом; взмах рисуется частицей
+ * {@code hell_yeah_stuff:slash} (текстура 16x16).
  *
  * ПКМ: дальний рубящий удар по области — центр в {@value #SPLASH_REACH}
- * блоках по взгляду, радиус {@value #SPLASH_RANGE}. С откатом, тратит
- * прочность. С зачарованием «Режущий рывок» ({@link ModEnchantments#CUTTING_DASH})
- * добавляется рывок вперёд и второй удар, перпендикулярный первому (крест).
+ * блоках по взгляду. Первый разрез рисуется частицей
+ * {@code hell_yeah_stuff:slash_cut}. С зачарованием «Judgment Cut»
+ * ({@link ModEnchantments#JUDGMENT_CUT}) через секунду в той же точке
+ * срабатывает ВТОРОЙ, перпендикулярный разрез (частица
+ * {@code hell_yeah_stuff:slash_judgment}). Перемещения (рывка) нет.
  */
 public class HalberdItem extends SwordItem {
 
-    /** Радиус рассечения вокруг основной цели (обычный ЛКМ-размах). */
+    /** Радиус рассечения вокруг основной цели (ЛКМ). */
     private static final double SLASH_RANGE = 1.7D;
-    /** Slash-урон по каждой задетой цели рядом. */
+    /** Slash-урон по каждой задетой цели. */
     private static final float SLASH_DAMAGE = 4.0F;
     /** Дальше этого от атакующего ЛКМ-размах не достаёт. */
     private static final double MAX_REACH_SQR = 12.25D; // 3.5 блока
@@ -47,11 +52,8 @@ public class HalberdItem extends SwordItem {
     private static final int SPLASH_COOLDOWN = 30;
     /** Прочность за ПКМ-удар. */
     private static final int SPLASH_DURABILITY_COST = 2;
-
-    /** Сила рывка вперёд у «Режущего рывка» (блоков/тик). */
-    private static final double DASH_STRENGTH = 0.9D;
-    /** Минимальный подброс рывка вверх. */
-    private static final double DASH_UP = 0.15D;
+    /** Задержка второго разреза Judgment Cut (тиков) — 1 секунда. */
+    private static final int SECOND_CUT_DELAY = 20;
 
     public HalberdItem(Tier tier, Properties properties) {
         super(tier, properties);
@@ -85,22 +87,19 @@ public class HalberdItem extends SwordItem {
         return super.hurtEnemy(stack, target, attacker);
     }
 
-    /**
-     * Фиолетовый «взмах» на КАЖДЫЙ мах алебардой (в том числе по воздуху).
-     * Возвращаем false — саму анимацию руки не отменяем.
-     */
+    /** Фиолетовый «взмах» ЛКМ (в т.ч. по воздуху). Анимацию руки не отменяем. */
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && entity.level() instanceof ServerLevel server) {
             Vec3 look = entity.getLookAngle();
-            spawnSlash(server, entity.getX() + look.x * 1.4D, entity.getY(0.55D),
-                    entity.getZ() + look.z * 1.4D, look);
+            spawnSlash(server, ModParticles.SLASH.get(),
+                    entity.getX() + look.x * 1.4D, entity.getY(0.55D), entity.getZ() + look.z * 1.4D);
         }
         return false;
     }
 
     // ------------------------------------------------------------------
-    // ПКМ: дальний рубящий удар по области (+ «Режущий рывок»)
+    // ПКМ: дальний рубящий удар (+ отложенный второй разрез Judgment Cut)
     // ------------------------------------------------------------------
 
     @Override
@@ -111,44 +110,47 @@ public class HalberdItem extends SwordItem {
         }
         player.getCooldowns().addCooldown(this, SPLASH_COOLDOWN);
 
-        boolean cuttingDash = ModEnchantments.level(stack, ModEnchantments.CUTTING_DASH) > 0;
-
         if (level instanceof ServerLevel server) {
             Vec3 look = player.getLookAngle();
             Vec3 center = player.getEyePosition().add(look.scale(SPLASH_REACH));
             DamageSource source = damageSource(server, player);
 
-            // Первый (горизонтальный) удар.
             int hits = areaSlash(server, player, source, center);
+            // Первый разрез — горизонтальные взмахи (текстура ПКМ slash_cut).
             Vec3 side = new Vec3(-look.z, 0.0D, look.x).normalize().scale(SPLASH_RANGE * 0.55D);
-            spawnSlash(server, center.x, center.y, center.z, look);
-            spawnSlash(server, center.x + side.x, center.y, center.z + side.z, look);
-            spawnSlash(server, center.x - side.x, center.y, center.z - side.z, look);
-
-            // «Режущий рывок»: второй удар, перпендикулярный первому (крест) —
-            // тот же урон ещё раз + вертикальная полоса взмахов.
-            if (cuttingDash) {
-                hits += areaSlash(server, player, source, center);
-                spawnSlash(server, center.x, center.y + SPLASH_HEIGHT * 0.6D, center.z, look);
-                spawnSlash(server, center.x, center.y, center.z, look);
-                spawnSlash(server, center.x, center.y - SPLASH_HEIGHT * 0.6D, center.z, look);
-            }
+            spawnSlash(server, ModParticles.SLASH_CUT.get(), center.x, center.y, center.z);
+            spawnSlash(server, ModParticles.SLASH_CUT.get(), center.x + side.x, center.y, center.z + side.z);
+            spawnSlash(server, ModParticles.SLASH_CUT.get(), center.x - side.x, center.y, center.z - side.z);
 
             server.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
                     1.0F, hits > 0 ? 0.9F : 1.1F);
             stack.hurtAndBreak(SPLASH_DURABILITY_COST, player, LivingEntity.getSlotForHand(hand));
-        } else if (cuttingDash) {
-            // Рывок вперёд — на клиенте владельца (движение клиент-авторитативно,
-            // как release-dash крюка-кошки), иначе сервер затрёт импульс.
-            Vec3 look = player.getLookAngle();
-            Vec3 dash = new Vec3(look.x, Math.max(look.y, DASH_UP), look.z)
-                    .normalize().scale(DASH_STRENGTH);
-            player.setDeltaMovement(player.getDeltaMovement().add(dash));
-            player.fallDistance = 0.0F;
+
+            // Judgment Cut: через секунду — второй, перпендикулярный разрез в той же точке.
+            if (ModEnchantments.level(stack, ModEnchantments.JUDGMENT_CUT) > 0) {
+                JudgmentCutHandler.schedule(server, player, center, SECOND_CUT_DELAY);
+            }
         }
-        // SUCCESS на клиенте -> обычный мах рукой (и фиолетовый след от onEntitySwing).
+        // SUCCESS на клиенте -> обычный мах рукой.
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    /**
+     * Второй разрез Judgment Cut — вызывается {@link JudgmentCutHandler} через
+     * {@value #SECOND_CUT_DELAY} тиков после первого. Тот же урон по кругу и
+     * вертикальная (перпендикулярная) полоса взмахов текстурой slash_judgment.
+     */
+    public static void performSecondCut(ServerLevel server, @Nullable Player attacker, Vec3 center) {
+        DamageSource source = attacker != null
+                ? server.damageSources().playerAttack(attacker)
+                : server.damageSources().magic();
+        areaSlash(server, attacker, source, center);
+        spawnSlash(server, ModParticles.SLASH_JUDGMENT.get(), center.x, center.y + SPLASH_HEIGHT * 0.6D, center.z);
+        spawnSlash(server, ModParticles.SLASH_JUDGMENT.get(), center.x, center.y, center.z);
+        spawnSlash(server, ModParticles.SLASH_JUDGMENT.get(), center.x, center.y - SPLASH_HEIGHT * 0.6D, center.z);
+        server.playSound(null, center.x, center.y, center.z,
+                SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 0.7F);
     }
 
     // ------------------------------------------------------------------
@@ -156,11 +158,11 @@ public class HalberdItem extends SwordItem {
     // ------------------------------------------------------------------
 
     /** Один рубящий проход по кругу вокруг {@code center}; возвращает число задетых. */
-    private static int areaSlash(ServerLevel server, Player player, DamageSource source, Vec3 center) {
+    private static int areaSlash(ServerLevel server, @Nullable Player player, DamageSource source, Vec3 center) {
         AABB area = AABB.ofSize(center, SPLASH_RANGE * 2.0D, SPLASH_HEIGHT * 2.0D, SPLASH_RANGE * 2.0D);
         int hits = 0;
         for (LivingEntity other : server.getEntitiesOfClass(LivingEntity.class, area)) {
-            if (other == player || !canSlash(player, other)) {
+            if (player != null && (other == player || !canSlash(player, other))) {
                 continue;
             }
             // Область — круг, а не квадрат: отсечь углы AABB.
@@ -189,8 +191,7 @@ public class HalberdItem extends SwordItem {
         return !(target instanceof Player tp && attacker instanceof Player ap && !ap.canHarmPlayer(tp));
     }
 
-    private static void spawnSlash(ServerLevel server, double x, double y, double z, Vec3 look) {
-        // count = 0: параметры скорости задают направление единственной частицы.
-        server.sendParticles(ModParticles.SLASH.get(), x, y, z, 0, look.x, 0.0D, look.z, 0.0D);
+    private static void spawnSlash(ServerLevel server, SimpleParticleType type, double x, double y, double z) {
+        server.sendParticles(type, x, y, z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
     }
 }

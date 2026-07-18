@@ -26,12 +26,13 @@ public final class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "amethyst_grenades"));
 
     /**
-     * «Режущий рывок» — для алебарды: ПКМ наносит обычный дальний рубящий
-     * удар и вдобавок второй удар, перпендикулярный первому (крест).
+     * «Judgment Cut» — для алебарды: ПКМ наносит дальний рубящий удар, а через
+     * секунду в той же точке срабатывает второй удар, перпендикулярный первому
+     * (крест). Рывка (перемещения) нет.
      */
-    public static final ResourceKey<Enchantment> CUTTING_DASH = ResourceKey.create(
+    public static final ResourceKey<Enchantment> JUDGMENT_CUT = ResourceKey.create(
             Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "cutting_dash"));
+            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "judgment_cut"));
 
     /**
      * «Рывок» — для поножей: быстрый горизонтальный рывок по нажатию клавиши

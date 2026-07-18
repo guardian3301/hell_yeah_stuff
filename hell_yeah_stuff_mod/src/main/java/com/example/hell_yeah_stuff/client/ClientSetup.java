@@ -129,8 +129,11 @@ public final class ClientSetup {
 
     @SubscribeEvent
     static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-        // Кастомная текстура взмаха аметистовой сабли.
+        // Взмахи алебарды: ЛКМ, первый разрез ПКМ и второй разрез Judgment Cut —
+        // разные текстуры, общий провайдер.
         event.registerSpriteSet(ModParticles.SLASH.get(), SlashParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.SLASH_CUT.get(), SlashParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.SLASH_JUDGMENT.get(), SlashParticle.Provider::new);
     }
 
     @SubscribeEvent

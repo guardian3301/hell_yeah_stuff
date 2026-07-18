@@ -1,7 +1,7 @@
 {
   "anvil_cost": 4,
   "description": {
-    "translate": "enchantment.hell_yeah_stuff.cutting_dash"
+    "translate": "enchantment.hell_yeah_stuff.judgment_cut"
   },
   "max_cost": {
     "base": 65,
