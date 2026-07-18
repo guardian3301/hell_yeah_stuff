@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/.idea/minecraft-crossbow-mod.iml" filepath="$PROJECT_DIR$/.idea/minecraft-crossbow-mod.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/hell_yeah_stuff_mod-no-sunflower(2).iml" filepath="$PROJECT_DIR$/.idea/hell_yeah_stuff_mod-no-sunflower(2).iml" />
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+      <module fileurl="file://$PROJECT_DIR$/.idea/hell_yeah_stuff.iml" filepath="$PROJECT_DIR$/.idea/hell_yeah_stuff.iml" />
     </modules>
   </component>
 </project>
