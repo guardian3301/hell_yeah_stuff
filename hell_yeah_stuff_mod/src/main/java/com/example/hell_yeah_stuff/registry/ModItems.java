@@ -1,7 +1,7 @@
 package com.example.hell_yeah_stuff.registry;
 
 import com.example.hell_yeah_stuff.HellYeahStuffMod;
-import com.example.hell_yeah_stuff.item.AmethystSaberItem;
+import com.example.hell_yeah_stuff.item.HalberdItem;
 import com.example.hell_yeah_stuff.item.ContenderPistolItem;
 import com.example.hell_yeah_stuff.item.DartItem;
 import com.example.hell_yeah_stuff.item.ExplosiveDartItem;
@@ -30,13 +30,13 @@ public final class ModItems {
     public static final DeferredItem<Item> GRAPPLE_DART = ITEMS.register("grapple_dart",
             () -> new GrappleDartItem(new Item.Properties()));
 
-    // >>> NEW: аметистовая сабля — ближний бой с режущим (slash) уроном
-    // по площади и собственной текстурой взмаха (частица hell_yeah_stuff:slash).
-    // Аметистовый боезапас арбалета — ВАНИЛЬНЫЙ осколок аметиста (веер),
-    // с зачарованием «Аметистовые гранаты» — осколок + обычная стрела.
-    public static final DeferredItem<Item> AMETHYST_SABER = ITEMS.register("amethyst_saber",
-            () -> new AmethystSaberItem(Tiers.IRON, new Item.Properties()
-                    .attributes(SwordItem.createAttributes(Tiers.IRON, 4, -2.2F))
+    // >>> NEW: алебарда — древковое оружие ближнего боя с режущим (slash)
+    // уроном по площади и собственной текстурой взмаха (частица
+    // hell_yeah_stuff:slash). Медленнее и сильнее меча. С зачарованием
+    // «Режущий рывок» ПКМ добавляет рывок + перпендикулярный второй удар.
+    public static final DeferredItem<Item> HALBERD = ITEMS.register("halberd",
+            () -> new HalberdItem(Tiers.IRON, new Item.Properties()
+                    .attributes(SwordItem.createAttributes(Tiers.IRON, 5, -2.6F))
                     .rarity(Rarity.UNCOMMON)));
     // <<< NEW
 

@@ -107,7 +107,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "hell_yeah_stuff:amethyst_saber",
+          "name": "hell_yeah_stuff:halberd",
           "weight": 2,
           "functions": [
             {

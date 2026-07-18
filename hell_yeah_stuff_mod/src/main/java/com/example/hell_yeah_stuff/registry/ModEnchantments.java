@@ -26,6 +26,22 @@ public final class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "amethyst_grenades"));
 
     /**
+     * «Режущий рывок» — для алебарды: ПКМ наносит обычный дальний рубящий
+     * удар и вдобавок второй удар, перпендикулярный первому (крест).
+     */
+    public static final ResourceKey<Enchantment> CUTTING_DASH = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "cutting_dash"));
+
+    /**
+     * «Рывок» — для поножей: быстрый горизонтальный рывок по нажатию клавиши
+     * (в стиле Content SMP), с откатом. Логика — {@code DashHandler}.
+     */
+    public static final ResourceKey<Enchantment> DASH = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "dash"));
+
+    /**
      * Уровень зачарования на стеке (для книг — из хранимых зачарований).
      * Работает по ключу, без обращения к реестру — удобно в местах,
      * где под рукой нет RegistryAccess.

@@ -34,6 +34,13 @@ public final class ModKeyMappings {
             GLFW.GLFW_KEY_R,
             "key.categories.hell_yeah_stuff");
 
+    /** Рывок в поножах с зачарованием «Рывок» (по умолчанию V). */
+    public static final KeyMapping DASH_KEY = new KeyMapping(
+            "key.hell_yeah_stuff.dash",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_V,
+            "key.categories.hell_yeah_stuff");
+
     /** true, если клавишу использования зажали мы, а не игрок. */
     private static boolean useForced = false;
 
@@ -42,6 +49,7 @@ public final class ModKeyMappings {
         @SubscribeEvent
         static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
             event.register(RELOAD_KEY);
+            event.register(DASH_KEY);
         }
 
         private Registration() {}

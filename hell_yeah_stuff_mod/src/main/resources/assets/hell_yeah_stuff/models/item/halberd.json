@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "hell_yeah_stuff:item/amethyst_saber"
+    "layer0": "hell_yeah_stuff:item/halberd"
   }
 }

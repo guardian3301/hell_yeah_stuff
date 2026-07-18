@@ -1,5 +1,6 @@
 package com.example.hell_yeah_stuff.item;
 
+import com.example.hell_yeah_stuff.registry.ModEnchantments;
 import com.example.hell_yeah_stuff.registry.ModParticles;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -16,19 +17,18 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Аметистовая сабля — оружие ближнего боя с режущим (slash) уроном.
+ * Алебарда — древковое оружие ближнего боя с режущим (slash) уроном.
  *
  * ЛКМ: каждый удар по цели дополнительно рассекает всех врагов рядом с ней
- * (всегда-активный «размах», не требующий Sweeping Edge). Взмах рисуется
- * той же частицей, что у меча (кадры sweep_0..7), но фиолетовой —
+ * (всегда-активный «размах»). Взмах рисуется фиолетовой частицей
  * {@code hell_yeah_stuff:slash}.
  *
- * ПКМ: сплеш-удар по области — центр в {@value #SPLASH_REACH} блоках по
- * взгляду (в 1.5 раза дальше обычной дальности удара меча, 3.0), радиус
- * {@value #SPLASH_RANGE} (в 2 раза больше обычного размаха сабли).
- * С откатом, тратит прочность.
+ * ПКМ: дальний рубящий удар по области — центр в {@value #SPLASH_REACH}
+ * блоках по взгляду, радиус {@value #SPLASH_RANGE}. С откатом, тратит
+ * прочность. С зачарованием «Режущий рывок» ({@link ModEnchantments#CUTTING_DASH})
+ * добавляется рывок вперёд и второй удар, перпендикулярный первому (крест).
  */
-public class AmethystSaberItem extends SwordItem {
+public class HalberdItem extends SwordItem {
 
     /** Радиус рассечения вокруг основной цели (обычный ЛКМ-размах). */
     private static final double SLASH_RANGE = 1.7D;
@@ -37,18 +37,23 @@ public class AmethystSaberItem extends SwordItem {
     /** Дальше этого от атакующего ЛКМ-размах не достаёт. */
     private static final double MAX_REACH_SQR = 12.25D; // 3.5 блока
 
-    /** ПКМ-сплеш: дальность центра = 3.0 (дальность удара меча) x 1.5. */
+    /** ПКМ-удар: дальность центра. */
     private static final double SPLASH_REACH = 4.5D;
-    /** ПКМ-сплеш: радиус области = SLASH_RANGE x 2. */
+    /** ПКМ-удар: радиус области. */
     private static final double SPLASH_RANGE = SLASH_RANGE * 2.0D;
-    /** Полувысота области сплеша. */
+    /** Полувысота области удара. */
     private static final double SPLASH_HEIGHT = 1.5D;
-    /** Откат ПКМ-сплеша (тиков). */
+    /** Откат ПКМ-удара (тиков). */
     private static final int SPLASH_COOLDOWN = 30;
-    /** Прочность за сплеш-удар. */
+    /** Прочность за ПКМ-удар. */
     private static final int SPLASH_DURABILITY_COST = 2;
 
-    public AmethystSaberItem(Tier tier, Properties properties) {
+    /** Сила рывка вперёд у «Режущего рывка» (блоков/тик). */
+    private static final double DASH_STRENGTH = 0.9D;
+    /** Минимальный подброс рывка вверх. */
+    private static final double DASH_UP = 0.15D;
+
+    public HalberdItem(Tier tier, Properties properties) {
         super(tier, properties);
     }
 
@@ -81,7 +86,7 @@ public class AmethystSaberItem extends SwordItem {
     }
 
     /**
-     * Фиолетовый «взмах меча» на КАЖДЫЙ мах саблей (в том числе по воздуху).
+     * Фиолетовый «взмах» на КАЖДЫЙ мах алебардой (в том числе по воздуху).
      * Возвращаем false — саму анимацию руки не отменяем.
      */
     @Override
@@ -95,7 +100,7 @@ public class AmethystSaberItem extends SwordItem {
     }
 
     // ------------------------------------------------------------------
-    // ПКМ: сплеш-удар по области на удалении
+    // ПКМ: дальний рубящий удар по области (+ «Режущий рывок»)
     // ------------------------------------------------------------------
 
     @Override
@@ -106,42 +111,41 @@ public class AmethystSaberItem extends SwordItem {
         }
         player.getCooldowns().addCooldown(this, SPLASH_COOLDOWN);
 
+        boolean cuttingDash = ModEnchantments.level(stack, ModEnchantments.CUTTING_DASH) > 0;
+
         if (level instanceof ServerLevel server) {
             Vec3 look = player.getLookAngle();
             Vec3 center = player.getEyePosition().add(look.scale(SPLASH_REACH));
-
             DamageSource source = damageSource(server, player);
-            AABB area = AABB.ofSize(center,
-                    SPLASH_RANGE * 2.0D, SPLASH_HEIGHT * 2.0D, SPLASH_RANGE * 2.0D);
-            int hits = 0;
-            for (LivingEntity other : server.getEntitiesOfClass(LivingEntity.class, area)) {
-                if (other == player || !canSlash(player, other)) {
-                    continue;
-                }
-                // Область — круг, а не квадрат: отсечь углы AABB.
-                if (other.position().subtract(center).horizontalDistanceSqr()
-                        > SPLASH_RANGE * SPLASH_RANGE) {
-                    continue;
-                }
-                if (other.hurt(source, SLASH_DAMAGE)) {
-                    other.knockback(0.5D,
-                            center.x - other.getX(),
-                            center.z - other.getZ());
-                    hits++;
-                }
-            }
 
-            // Волна из трёх взмахов поперёк направления взгляда —
-            // визуально накрывает всю увеличенную область.
+            // Первый (горизонтальный) удар.
+            int hits = areaSlash(server, player, source, center);
             Vec3 side = new Vec3(-look.z, 0.0D, look.x).normalize().scale(SPLASH_RANGE * 0.55D);
             spawnSlash(server, center.x, center.y, center.z, look);
             spawnSlash(server, center.x + side.x, center.y, center.z + side.z, look);
             spawnSlash(server, center.x - side.x, center.y, center.z - side.z, look);
 
+            // «Режущий рывок»: второй удар, перпендикулярный первому (крест) —
+            // тот же урон ещё раз + вертикальная полоса взмахов.
+            if (cuttingDash) {
+                hits += areaSlash(server, player, source, center);
+                spawnSlash(server, center.x, center.y + SPLASH_HEIGHT * 0.6D, center.z, look);
+                spawnSlash(server, center.x, center.y, center.z, look);
+                spawnSlash(server, center.x, center.y - SPLASH_HEIGHT * 0.6D, center.z, look);
+            }
+
             server.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
                     1.0F, hits > 0 ? 0.9F : 1.1F);
             stack.hurtAndBreak(SPLASH_DURABILITY_COST, player, LivingEntity.getSlotForHand(hand));
+        } else if (cuttingDash) {
+            // Рывок вперёд — на клиенте владельца (движение клиент-авторитативно,
+            // как release-dash крюка-кошки), иначе сервер затрёт импульс.
+            Vec3 look = player.getLookAngle();
+            Vec3 dash = new Vec3(look.x, Math.max(look.y, DASH_UP), look.z)
+                    .normalize().scale(DASH_STRENGTH);
+            player.setDeltaMovement(player.getDeltaMovement().add(dash));
+            player.fallDistance = 0.0F;
         }
         // SUCCESS на клиенте -> обычный мах рукой (и фиолетовый след от onEntitySwing).
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
@@ -150,6 +154,26 @@ public class AmethystSaberItem extends SwordItem {
     // ------------------------------------------------------------------
     // Общее
     // ------------------------------------------------------------------
+
+    /** Один рубящий проход по кругу вокруг {@code center}; возвращает число задетых. */
+    private static int areaSlash(ServerLevel server, Player player, DamageSource source, Vec3 center) {
+        AABB area = AABB.ofSize(center, SPLASH_RANGE * 2.0D, SPLASH_HEIGHT * 2.0D, SPLASH_RANGE * 2.0D);
+        int hits = 0;
+        for (LivingEntity other : server.getEntitiesOfClass(LivingEntity.class, area)) {
+            if (other == player || !canSlash(player, other)) {
+                continue;
+            }
+            // Область — круг, а не квадрат: отсечь углы AABB.
+            if (other.position().subtract(center).horizontalDistanceSqr() > SPLASH_RANGE * SPLASH_RANGE) {
+                continue;
+            }
+            if (other.hurt(source, SLASH_DAMAGE)) {
+                other.knockback(0.5D, center.x - other.getX(), center.z - other.getZ());
+                hits++;
+            }
+        }
+        return hits;
+    }
 
     private static DamageSource damageSource(ServerLevel server, LivingEntity attacker) {
         return attacker instanceof Player player

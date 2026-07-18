@@ -11,10 +11,10 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 /**
- * Частица взмаха аметистовой сабли: ТЕ ЖЕ кадры, что у ванильного
- * sweep_attack меча (minecraft:sweep_0..7, см. particles/slash.json),
- * но с фиолетовым (аметистовым) тинтом. Поведение 1-в-1 повторяет
- * ванильный AttackSweepParticle.
+ * Частица взмаха алебарды: собственные кадры анимации в отдельных файлах
+ * (hell_yeah_stuff:slash_0..3, текстуры 32x32, см. particles/slash.json и
+ * textures/particle/slash_*.png), с фиолетовым (аметистовым) тинтом.
+ * Поведение повторяет ванильный AttackSweepParticle.
  */
 @OnlyIn(Dist.CLIENT)
 public class SlashParticle extends TextureSheetParticle {
