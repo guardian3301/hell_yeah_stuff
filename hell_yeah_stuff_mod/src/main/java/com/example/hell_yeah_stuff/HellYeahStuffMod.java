@@ -3,6 +3,7 @@ package com.example.hell_yeah_stuff;
 import com.example.hell_yeah_stuff.registry.ModEntities;
 import com.example.hell_yeah_stuff.registry.ModFeatures;
 import com.example.hell_yeah_stuff.registry.ModItems;
+import com.example.hell_yeah_stuff.registry.ModMobEffects;
 import com.example.hell_yeah_stuff.registry.ModParticles;
 import com.example.hell_yeah_stuff.registry.ModSounds;
 import net.neoforged.bus.api.IEventBus;
@@ -22,5 +23,6 @@ public class HellYeahStuffMod {
         ModSounds.SOUND_EVENTS.register(modEventBus); // >>> NEW: кастомные звуки
         ModFeatures.FEATURES.register(modEventBus); // ель с платформой (worldgen)
         ModParticles.PARTICLE_TYPES.register(modEventBus); // взмах аметистовой сабли
+        ModMobEffects.MOB_EFFECTS.register(modEventBus); // «Взрывоопасность» от взрывного дротика
     }
 }
