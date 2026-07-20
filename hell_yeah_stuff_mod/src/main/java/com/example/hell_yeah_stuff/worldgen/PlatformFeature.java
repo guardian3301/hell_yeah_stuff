@@ -179,11 +179,7 @@ public class PlatformFeature extends Feature<NoneFeatureConfiguration> {
 
     /**
      * true, если вокруг точки мало деревьев: считаем еловые брёвна в радиусе
-<<<<<<< HEAD
-     * 10 блоков (��о горизонтали, высота +20 от origin). Один взрослый ствол —
-=======
      * 10 блоков (по горизонтали, высота +20 от origin). Один взрослый ствол —
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
      * ~6-30 брёвен, порог 12 означает "меньше пары деревьев рядом".
      */
     private static boolean fewTreesAround(WorldGenLevel level, BlockPos origin) {

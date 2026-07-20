@@ -49,8 +49,6 @@
     {
       "predicate": {"charged": 1, "hell_yeah_stuff:grapple": 1},
       "model": "hell_yeah_stuff:item/mini_crossbow_grapple_dart"
-<<<<<<< HEAD
-=======
     },
     {
       "predicate": {"charged": 1, "hell_yeah_stuff:amethyst": 1},
@@ -59,7 +57,6 @@
     {
       "predicate": {"charged": 1, "hell_yeah_stuff:amethyst": 1, "hell_yeah_stuff:grenades": 1},
       "model": "hell_yeah_stuff:item/mini_crossbow_amethyst_grenade"
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     }
   ]
 }

@@ -1,12 +1,6 @@
 package com.example.hell_yeah_stuff.item;
 
 import com.example.hell_yeah_stuff.compat.CuriosCompat;
-<<<<<<< HEAD
-import com.example.hell_yeah_stuff.entity.GrappleDartEntity;
-import com.example.hell_yeah_stuff.registry.ModItems;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-=======
 import com.example.hell_yeah_stuff.entity.AmethystGrenadeEntity;
 import com.example.hell_yeah_stuff.entity.AmethystShardEntity;
 import com.example.hell_yeah_stuff.entity.GrappleDartEntity;
@@ -17,21 +11,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-<<<<<<< HEAD
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ChargedProjectiles;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.Level;
-
-=======
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
@@ -46,7 +30,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import java.util.function.Predicate;
 
 /**
@@ -62,13 +45,6 @@ import java.util.function.Predicate;
  */
 public class MiniCrossbowItem extends CrossbowItem {
 
-<<<<<<< HEAD
-    /** Только дротики и цепкий дротик. Ванильные стрелы и фейерверки отклоняются. */
-    public static final Predicate<ItemStack> SUPPORTED_AMMO =
-            stack -> stack.is(ModItems.DART.get())
-                    || stack.is(ModItems.EXPLOSIVE_DART.get())
-                    || stack.is(ModItems.GRAPPLE_DART.get());
-=======
     /** Дротики, цепкий дротик и осколок аметиста. Стрелы и фейерверки отклоняются. */
     public static final Predicate<ItemStack> SUPPORTED_AMMO =
             stack -> stack.is(ModItems.DART.get())
@@ -80,7 +56,6 @@ public class MiniCrossbowItem extends CrossbowItem {
     private static final int AMETHYST_SHARD_COUNT = 6;
     /** Разброс веера (ванильная неточность выстрела арбалета = 1.0). */
     private static final float AMETHYST_SPREAD = 10.0F;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 
     public MiniCrossbowItem(Properties properties) {
         super(properties);
@@ -131,11 +106,7 @@ public class MiniCrossbowItem extends CrossbowItem {
         InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
         if (wasCharged && !isCharged(crossbow)) {
             if (wasAutoLoaded) {
-<<<<<<< HEAD
-                // Второй (авто-заряженный) выст��ел — дальше только ручная зарядка.
-=======
                 // Второй (авто-заряженный) выстрел — дальше только ручная зарядка.
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
                 setMagState(crossbow, hasMag, 0, false);
             } else if (hasMag) {
                 ItemStack ammo = player.getProjectile(crossbow);
@@ -157,8 +128,6 @@ public class MiniCrossbowItem extends CrossbowItem {
     }
 
     // ---------------------------------------------------------------
-<<<<<<< HEAD
-=======
     // Аметистовый боезапас: обычный осколок аметиста = дробовой веер;
     // с зачарованием «Аметистовые гранаты» тот же осколок летит
     // контактной гранатой. Остальные дротики стреляют штатным путём
@@ -222,7 +191,6 @@ public class MiniCrossbowItem extends CrossbowItem {
     }
 
     // ---------------------------------------------------------------
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     // Жёлтая плашка (рисуется НАД шкалой прочности — см. MagazineBarDecorator):
     // полная = заряжен + доступен авто-второй выстрел, половина = остался
     // авто-заряженный выстрел, пустая = нужно заряжать вручную.
@@ -250,10 +218,7 @@ public class MiniCrossbowItem extends CrossbowItem {
         if (level.isClientSide || !(entity instanceof Player player) || level.getGameTime() % 5 != 0) {
             return;
         }
-<<<<<<< HEAD
-=======
         enforceEnchantCompat(stack, level);
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         boolean mag = CuriosCompat.hasCurio(player, ModItems.BLOCK_MAGAZINE.get());
         CompoundTag t = tag(stack);
         boolean auto = t.getBoolean(TAG_AUTO);
@@ -272,8 +237,6 @@ public class MiniCrossbowItem extends CrossbowItem {
         }
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Страховка несовместимости: если на арбалете каким-то путём оказались
      * И Multishot, И Quick Charge III одновременно (стол зачарований мог
@@ -291,7 +254,6 @@ public class MiniCrossbowItem extends CrossbowItem {
         EnchantmentHelper.updateEnchantments(stack, mutable -> mutable.set(quickCharge, 2));
     }
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     private static CompoundTag tag(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         return data != null ? data.copyTag() : new CompoundTag();

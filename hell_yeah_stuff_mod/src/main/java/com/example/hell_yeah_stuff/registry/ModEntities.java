@@ -1,11 +1,8 @@
 package com.example.hell_yeah_stuff.registry;
 
 import com.example.hell_yeah_stuff.HellYeahStuffMod;
-<<<<<<< HEAD
-=======
 import com.example.hell_yeah_stuff.entity.AmethystGrenadeEntity;
 import com.example.hell_yeah_stuff.entity.AmethystShardEntity;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import com.example.hell_yeah_stuff.entity.BulletEntity;
 import com.example.hell_yeah_stuff.entity.DartEntity;
 import com.example.hell_yeah_stuff.entity.ExplosiveDartEntity;
@@ -45,8 +42,6 @@ public final class ModEntities {
                             .updateInterval(20)
                             .build("grapple_dart"));
 
-<<<<<<< HEAD
-=======
     // >>> NEW: аметистовые снаряды — осколок (дробина) и контактная граната
     public static final DeferredHolder<EntityType<?>, EntityType<AmethystShardEntity>> AMETHYST_SHARD =
             ENTITY_TYPES.register("amethyst_shard",
@@ -65,7 +60,6 @@ public final class ModEntities {
                             .build("amethyst_grenade"));
     // <<< NEW
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     // >>> NEW: пуля пистолета (быстрый снаряд, частые апдейты трека)
     public static final DeferredHolder<EntityType<?>, EntityType<BulletEntity>> BULLET =
             ENTITY_TYPES.register("bullet",

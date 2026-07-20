@@ -1,0 +1,13 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "hell_yeah_stuff:item/halberd_in_hand"
+  },
+  "perspectives": {
+    "gui": { "parent": "hell_yeah_stuff:item/halberd_gui" },
+    "ground": { "parent": "hell_yeah_stuff:item/halberd_gui" },
+    "fixed": { "parent": "hell_yeah_stuff:item/halberd_gui" },
+    "head": { "parent": "hell_yeah_stuff:item/halberd_gui" }
+  }
+}

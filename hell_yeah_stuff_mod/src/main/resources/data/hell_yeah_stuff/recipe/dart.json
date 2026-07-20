@@ -8,11 +8,7 @@
   ],
   "key": {
     "H": {
-<<<<<<< HEAD
-      "item": "hell_yeah_stuff:hardened_iron"
-=======
       "item": "minecraft:iron_ingot"
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     },
     "S": {
       "item": "minecraft:stick"

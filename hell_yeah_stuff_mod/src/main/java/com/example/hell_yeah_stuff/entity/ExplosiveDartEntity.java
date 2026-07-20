@@ -2,9 +2,11 @@ package com.example.hell_yeah_stuff.entity;
 
 import com.example.hell_yeah_stuff.registry.ModEntities;
 import com.example.hell_yeah_stuff.registry.ModItems;
+import com.example.hell_yeah_stuff.registry.ModMobEffects;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,10 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-<<<<<<< HEAD
-=======
 import net.minecraft.world.phys.Vec3;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import org.jetbrains.annotations.Nullable;
 
 public class ExplosiveDartEntity extends AbstractArrow {
@@ -31,15 +30,6 @@ public class ExplosiveDartEntity extends AbstractArrow {
     /** -1 = не активирован; иначе — оставшиеся тики до взрыва */
     private int fuseTicks = -1;
 
-<<<<<<< HEAD
-=======
-    /** Цель, в которую впился дротик: до взрыва он следует за ней,
-     *  как обычная стрела, торчащая из моба. Не сохраняется в NBT —
-     *  после перезагрузки мира дротик просто доработает таймер на месте. */
-    @Nullable
-    private LivingEntity stuckTarget;
-
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
     public ExplosiveDartEntity(EntityType<? extends ExplosiveDartEntity> type, Level level) {
         super(type, level);
     }
@@ -58,29 +48,14 @@ public class ExplosiveDartEntity extends AbstractArrow {
     public void tick() {
         super.tick();
 
-<<<<<<< HEAD
-        if (this.fuseTicks >= 0 && !this.level().isClientSide) {
-=======
         if (this.level().isClientSide) {
             return;
         }
 
-        // Впился в цель: едем вместе с ней (взрыв догонит жертву).
-        if (this.stuckTarget != null) {
-            if (this.stuckTarget.isAlive() && this.stuckTarget.level() == this.level()) {
-                this.setPos(this.stuckTarget.getX(),
-                        this.stuckTarget.getY(0.5D),
-                        this.stuckTarget.getZ());
-                this.setDeltaMovement(Vec3.ZERO);
-            } else {
-                // Цель умерла/пропала — дротик остаётся тикать на месте.
-                this.stuckTarget = null;
-                this.noPhysics = false;
-            }
-        }
-
+        // Фитиль дротика (попадание в блок / неживую цель): нарастающий писк,
+        // взрыв по достижении нуля. Попадание по мобу идёт другим путём —
+        // через эффект «Взрывоопасность», см. onHitEntity.
         if (this.fuseTicks >= 0) {
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
             if (this.fuseTicks == 0) {
                 this.explode();
                 return;
@@ -110,35 +85,27 @@ public class ExplosiveDartEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-<<<<<<< HEAD
-        // Не вызываем super, чтобы дротик не исчез после попадания —
-        // он должен остаться и взорваться по таймеру
-=======
-        // Не вызываем super: ванильный путь уничтожил бы дротик после
-        // попадания, а он должен ВПИТЬСЯ в цель, как обычная стрела,
-        // и взорваться по таймеру, следуя за жертвой.
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
-        if (!this.level().isClientSide) {
-            Entity target = result.getEntity();
-            Entity owner = this.getOwner();
-            DamageSource source = this.damageSources().arrow(this, owner != null ? owner : this);
-<<<<<<< HEAD
-            target.hurt(source, (float) this.getBaseDamage());
+        // Не вызываем super: ванильный путь уничтожил бы дротик сразу.
+        // По живой цели дротик наносит прямой урон и «минирует» её —
+        // вешает эффект «Взрывоопасность» на фиксированные 3 секунды.
+        // По истечении эффекта ExplosivenessHandler делает ТОТ ЖЕ взрыв,
+        // что и фитиль при попадании в блок.
+        if (this.level().isClientSide) {
+            return;
+        }
+        Entity target = result.getEntity();
+        Entity owner = this.getOwner();
+        DamageSource source = this.damageSources().arrow(this, owner != null ? owner : this);
+        target.hurt(source, (float) this.getBaseDamage());
 
-            // Дротик застревает: гасим скорость и останавливаемся на месте попадания
-            this.setDeltaMovement(this.getDeltaMovement().scale(-0.05D));
-=======
-            boolean hurt = target.hurt(source, (float) this.getBaseDamage());
-
-            if (hurt && target instanceof LivingEntity living && living.isAlive()) {
-                // «Впился»: визуально торчит из цели (счётчик стрел ванили)
-                // и с этого момента прилип — следует за целью до взрыва.
-                living.setArrowCount(living.getArrowCount() + 1);
-                this.stuckTarget = living;
-                this.noPhysics = true; // не цепляем повторные хиты/блоки по пути
-            }
+        if (target instanceof LivingEntity living && living.isAlive()) {
+            living.addEffect(new MobEffectInstance(
+                    ModMobEffects.EXPLOSIVENESS, FUSE_TIME, 0, false, true, true));
+            this.discard();
+        } else {
+            // Неживая цель (лодка, стойка и т.п.) — ведём себя как при
+            // ударе о блок: гасим скорость и запускаем фитиль на месте.
             this.setDeltaMovement(Vec3.ZERO);
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
             this.arm();
         }
     }
@@ -154,9 +121,17 @@ public class ExplosiveDartEntity extends AbstractArrow {
         }
     }
 
+    /**
+     * Взрыв взрывного дротика — общий и для попадания в блок (по фитилю),
+     * и для истечения эффекта «Взрывоопасность» на цели: одинаковая
+     * мощность и тип взаимодействия (TNT).
+     */
+    public static void detonate(Level level, @Nullable Entity source, double x, double y, double z) {
+        level.explode(source, x, y, z, EXPLOSION_POWER, Level.ExplosionInteraction.TNT);
+    }
+
     private void explode() {
-        this.level().explode(this, this.getX(), this.getY(), this.getZ(),
-                EXPLOSION_POWER, Level.ExplosionInteraction.TNT);
+        detonate(this.level(), this, this.getX(), this.getY(), this.getZ());
         this.discard();
     }
 

@@ -2,34 +2,24 @@ package com.example.hell_yeah_stuff.client;
 
 import com.example.hell_yeah_stuff.HellYeahStuffMod;
 import com.example.hell_yeah_stuff.item.ContenderPistolItem;
-<<<<<<< HEAD
-import com.example.hell_yeah_stuff.registry.ModEntities;
-import com.example.hell_yeah_stuff.registry.ModItems;
-=======
 import com.example.hell_yeah_stuff.registry.ModEnchantments;
 import com.example.hell_yeah_stuff.registry.ModEntities;
 import com.example.hell_yeah_stuff.registry.ModItems;
 import com.example.hell_yeah_stuff.registry.ModParticles;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CrossbowItem;
-<<<<<<< HEAD
-=======
 import net.minecraft.world.item.Items;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
-<<<<<<< HEAD
-=======
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @EventBusSubscriber(modid = HellYeahStuffMod.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -81,8 +71,6 @@ public final class ClientSetup {
                         return charged != null && charged.contains(ModItems.GRAPPLE_DART.get()) ? 1.0F : 0.0F;
                     });
 
-<<<<<<< HEAD
-=======
             // 1.0 when an amethyst shard is loaded.
             ItemProperties.register(ModItems.MINI_CROSSBOW.get(),
                     ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "amethyst"),
@@ -98,7 +86,6 @@ public final class ClientSetup {
                     (stack, level, entity, seed) ->
                             ModEnchantments.level(stack, ModEnchantments.AMETHYST_GRENADES) > 0 ? 1.0F : 0.0F);
 
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
             // 1.0 когда пистолет заряжен патроном (для будущей модели/анимации).
             ItemProperties.register(ModItems.CONTENDER_PISTOL.get(),
                     ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "loaded"),
@@ -137,17 +124,22 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.EXPLOSIVE_DART.get(), ExplosiveDartRenderer::new);
         event.registerEntityRenderer(ModEntities.GRAPPLE_DART.get(), GrappleDartRenderer::new);
         event.registerEntityRenderer(ModEntities.BULLET.get(), BulletRenderer::new); // >>> NEW
-<<<<<<< HEAD
-=======
         event.registerEntityRenderer(ModEntities.AMETHYST_SHARD.get(), AmethystShardRenderer::new);
         event.registerEntityRenderer(ModEntities.AMETHYST_GRENADE.get(), AmethystGrenadeRenderer::new);
     }
 
     @SubscribeEvent
     static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-        // Кастомная текстура взмаха аметистовой сабли.
-        event.registerSpriteSet(ModParticles.SLASH.get(), SlashParticle.Provider::new);
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
+        // Взмахи алебарды: ЛКМ, первый разрез ПКМ и второй разрез Judgment Cut —
+        // разные текстуры, общий провайдер.
+        // Один большой анимированный слэш (кадры slash_0..slash_3). Варианты
+        // различаются размером, наклоном и оттенком, но частица всегда одна.
+        event.registerSpriteSet(ModParticles.SLASH.get(),
+                sprites -> new SlashParticle.Provider(sprites, 1.4F, 45.0F, 1.0F, 1.0F, 1.0F));
+        event.registerSpriteSet(ModParticles.SLASH_CUT.get(),
+                sprites -> new SlashParticle.Provider(sprites, 2.6F, 0.0F, 1.0F, 1.0F, 1.0F));
+        event.registerSpriteSet(ModParticles.SLASH_JUDGMENT.get(),
+                sprites -> new SlashParticle.Provider(sprites, 2.6F, 90.0F, 0.78F, 0.55F, 1.0F));
     }
 
     @SubscribeEvent
@@ -161,6 +153,16 @@ public final class ClientSetup {
         // Gives the mini crossbow the exact same first/third person hold and
         // charge animations as the vanilla crossbow.
         event.registerItem(new MiniCrossbowClientExtensions(), ModItems.MINI_CROSSBOW.get());
+
+        // Алебарда: своя модель в руке (halberd.png 32×32) и в GUI (halberd_hand.png 16×16).
+        event.registerItem(new HalberdClientExtensions(), ModItems.HALBERD.get());
+    }
+
+    @SubscribeEvent
+    static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event) {
+        // Модели алебарды, которые BEWLR подставляет вручную в зависимости от вида.
+        event.register(HalberdBEWLR.HELD_MODEL);
+        event.register(HalberdBEWLR.INVENTORY_MODEL);
     }
 
     private ClientSetup() {}

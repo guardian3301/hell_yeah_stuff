@@ -43,11 +43,7 @@
         },
         {
           "type": "minecraft:item",
-<<<<<<< HEAD
-          "name": "hell_yeah_stuff:hardened_iron",
-=======
           "name": "minecraft:iron_ingot",
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
           "weight": 3,
           "functions": [
             {
@@ -58,20 +54,6 @@
         },
         {
           "type": "minecraft:item",
-<<<<<<< HEAD
-          "name": "hell_yeah_stuff:sunflower_seeds",
-          "weight": 7,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": { "type": "minecraft:uniform", "min": 2, "max": 4 }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-=======
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
           "name": "minecraft:cooked_rabbit",
           "weight": 8,
           "functions": [

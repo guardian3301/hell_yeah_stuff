@@ -24,8 +24,6 @@ public class GrappleDartItem extends ArrowItem {
     @Override
     public AbstractArrow createArrow(Level level, ItemStack ammo, LivingEntity shooter, @Nullable ItemStack weapon) {
         // «Один крюк за раз»: старый дротик исчезает при новом выстреле.
-<<<<<<< HEAD
-=======
         // Заякоренный берём из реестра (он может висеть в Sable-плоте за
         // тысячи блоков), летящие рядом добираем локальным поиском.
         if (shooter instanceof net.minecraft.world.entity.player.Player player) {
@@ -34,7 +32,6 @@ public class GrappleDartItem extends ArrowItem {
                 active.discard();
             }
         }
->>>>>>> 6220b5c (аметистовое обновление смотрите updatelog)
         for (GrappleDartEntity old : level.getEntitiesOfClass(GrappleDartEntity.class,
                 shooter.getBoundingBox().inflate(128.0D), dart -> dart.getOwner() == shooter)) {
             old.discard();

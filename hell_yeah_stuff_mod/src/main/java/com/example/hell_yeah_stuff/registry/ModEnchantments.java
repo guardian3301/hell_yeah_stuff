@@ -26,6 +26,23 @@ public final class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "amethyst_grenades"));
 
     /**
+     * «Judgment Cut» — для алебарды: ПКМ наносит дальний рубящий удар, а через
+     * секунду в той же точке срабатывает второй удар, перпендикулярный первому
+     * (крест). Рывка (перемещения) нет.
+     */
+    public static final ResourceKey<Enchantment> JUDGMENT_CUT = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "judgment_cut"));
+
+    /**
+     * «Рывок» — для поножей: быстрый горизонтальный рывок по нажатию клавиши
+     * (в стиле Content SMP), с откатом. Логика — {@code DashHandler}.
+     */
+    public static final ResourceKey<Enchantment> DASH = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(HellYeahStuffMod.MODID, "dash"));
+
+    /**
      * Уровень зачарования на стеке (для книг — из хранимых зачарований).
      * Работает по ключу, без обращения к реестру — удобно в местах,
      * где под рукой нет RegistryAccess.
